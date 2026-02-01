@@ -20,7 +20,7 @@
         }
         .font-serif { font-family: 'Playfair Display', serif; }
 
-        /* Sistema de Transiciones Limpias */
+        /* Sistema de Transiciones Suaves */
         .slides-wrapper {
             position: relative;
             width: 100%;
@@ -35,60 +35,61 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            /* Cambiado a flex-start para evitar que se corte el contenido superior en overflow */
+            justify-content: flex-start; 
             opacity: 0;
             visibility: hidden;
             transition: opacity var(--transition-speed) ease, transform var(--transition-speed) ease;
-            transform: scale(1.05);
+            transform: translateY(20px);
             z-index: 1;
+            padding-top: 5rem; /* Espacio para el indicador superior */
+            padding-bottom: 8rem; /* Espacio para el footer */
+            overflow-y: auto; /* Permite scroll en el slide completo si es necesario */
         }
         .slide.active {
             opacity: 1;
             visibility: visible;
-            transform: scale(1);
+            transform: translateY(0);
             z-index: 10;
         }
 
         /* Ajuste de Imagen de Portada */
         .cover-image-container {
-            width: 100%;
-            max-width: 500px;
-            height: auto;
-            max-height: 60vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 90%;
+            max-width: 450px;
+            margin: 0 auto;
         }
         .cover-image-container img {
             width: 100%;
-            height: 100%;
-            object-fit: contain; /* Asegura que la imagen se vea completa */
+            height: auto;
             border-radius: 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Scrollbar interna para textos largos */
-        .content-scroll {
-            max-height: 70vh;
-            overflow-y: auto;
-            padding-right: 1rem;
+        /* Contenedor de contenido con scroll refinado */
+        .content-container {
             width: 100%;
             max-width: 800px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.2) transparent;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .content-scroll::-webkit-scrollbar { width: 4px; }
-        .content-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+        /* Scrollbar estética */
+        .slide::-webkit-scrollbar { width: 4px; }
+        .slide::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
         /* Acordeones */
         .reflection-body {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-out;
-            background: rgba(255,255,255,0.03);
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255,255,255,0.02);
         }
         .reflection-item.open .reflection-body {
-            max-height: 200px;
+            max-height: 500px; /* Suficiente para el texto */
         }
 
         .bg-overlay {
@@ -97,6 +98,16 @@
             transition: background-color 1.5s ease;
             z-index: 0;
         }
+        
+        /* Animación sutil de entrada de texto */
+        .slide.active h2, .slide.active p, .slide.active .content-line {
+            animation: fadeInText 1s ease forwards;
+        }
+        
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body class="bg-transition">
@@ -104,7 +115,7 @@
     <div id="bg-layer" class="bg-overlay" style="background-color: #000;"></div>
 
     <!-- Indicador Superior -->
-    <div class="fixed top-8 left-0 w-full flex justify-center gap-2 z-50">
+    <div class="fixed top-8 left-0 w-full flex justify-center gap-2 z-[100]">
         <div id="dots-container" class="flex gap-2"></div>
     </div>
 
@@ -114,11 +125,11 @@
     </div>
 
     <!-- Controles -->
-    <footer class="fixed bottom-0 left-0 w-full p-6 md:p-10 flex justify-between items-center z-50 bg-gradient-to-t from-black via-transparent to-transparent">
-        <button id="btn-prev" class="px-4 py-2 text-xs font-bold tracking-widest uppercase text-white/30 hover:text-white transition-opacity opacity-0">
+    <footer class="fixed bottom-0 left-0 w-full p-6 md:p-10 flex justify-between items-center z-[100] bg-gradient-to-t from-black via-black/40 to-transparent">
+        <button id="btn-prev" class="px-6 py-3 text-[10px] font-bold tracking-[0.3em] uppercase text-white/30 hover:text-white transition-all opacity-0">
             ← Atrás
         </button>
-        <button id="btn-next" class="px-8 py-3 rounded-full bg-white text-black font-bold text-xs tracking-widest uppercase transition-all hover:scale-105 active:scale-95 shadow-xl">
+        <button id="btn-next" class="px-10 py-4 rounded-full bg-white text-black font-bold text-[10px] tracking-[0.3em] uppercase transition-all hover:scale-105 active:scale-95 shadow-2xl">
             Siguiente
         </button>
     </footer>
@@ -130,75 +141,81 @@
                 subtitle: "La Sinfonía de los Romanos",
                 image: "https://i.imgur.com/ncZnQAB.jpeg",
                 desc: "Cuando el éxito suena fuerte, pero el corazón está desafinado.",
-                long: "No es religión, es el arte de la armonía perfecta.",
+                long: "Prepárate para descubrir por qué incluso los 'famosos' necesitan ser rescatados de sí mismos. No es religión, es el arte de la armonía perfecta.",
                 bg: "#000000",
                 type: "cover"
             },
             {
                 title: "El Piano de la Gran Sala",
                 subtitle: "Fase 1: El Ruido de la Uniformidad",
-                desc: "Un piano que olvidó que la música nace de la integración.",
-                long: `Cuentan que un piano de cola presumía de su sonido perfecto. Las Teclas Blancas decidieron que ellas eran las dueñas de la música y que las Negras solo estorbaban.\n\nAl callar las negras, la música sonó plana, vacía y sin alma. El maestro susurró: "La armonía solo existe cuando las negras aceptan su lugar y las blancas reconocen que sin ellas, la obra está incompleta".`,
+                desc: "Un piano que olvidó que la música nace de la integración de todos sus elementos.",
+                long: `Cuentan que en un antiguo conservatorio, había un piano de cola majestuoso que presumía de su sonido perfecto. Un día, las Teclas Blancas se reunieron y decidieron que ellas eran las verdaderas dueñas de la música. "Somos puras, claras y representamos las notas fundamentales. Las Teclas Negras solo interrumpen nuestra blancura", dijeron con soberbia.
+
+Las Teclas Negras, sintiéndose heridas, decidieron guardar silencio. "Si no nos quieren, no nos necesitan", pensaron.
+
+Esa tarde, un joven músico se sentó a tocar. Intentó interpretar una melodía de esperanza, pero por más que se esforzaba, la música sonaba vacía, plana y sin alma. Faltaban los matices, las transiciones, los sostenidos y los bemoles que dan profundidad a la emoción. El piano ya no cantaba; solo emitía sonidos monótonos.
+
+El maestro del conservatorio se acercó y le susurró: "El problema no es tu talento, es que este piano ha olvidado que la música no nace de la uniformidad. La armonía solo existe cuando las negras aceptan su lugar y las blancas reconocen que sin ellas, la obra está incompleta".`,
                 reflections: [
-                    { t: "El egoísmo es ruido; la armonía es música", d: "El ruido es la insistencia del 'yo' por sobresalir a toda costa." },
-                    { t: "La trampa del protagonismo absoluto", d: "Creer que somos los únicos dueños de la verdad nos aísla." },
-                    { t: "La sincronía requiere humildad", d: "La humildad es la llave de la sinfonía de la vida." }
+                    { t: "El egoísmo es ruido; la armonía es música", d: "El ruido es la insistencia del 'yo' por sobresalir a toda costa. La armonía es la renuncia voluntaria al protagonismo individual para que la obra del Creador brille con plenitud." },
+                    { t: "La trampa del protagonismo absoluto", d: "Creer que somos los únicos dueños de la verdad o del talento nos aísla. El éxito solitario es el preludio de un alma vacía; nada que valga la pena se construye sin el aporte de lo 'diferente'." },
+                    { t: "La sincronía requiere humildad", d: "Solo cuando las blancas reconocieron su limitación, el piano volvió a cantar. La humildad es la capacidad de admitir que nuestra nota, por hermosa que sea, es insuficiente para la sinfonía de la vida." }
                 ],
                 bg: "#0c0a09"
             },
             {
                 title: "El Arquitecto del Destino",
                 subtitle: "Pablo: De perseguidor a Estratega",
-                desc: "Pablo transformó una carta en una ingeniería espiritual.",
-                long: "Entendía que para conquistar Roma no necesitaba legiones, sino una idea cuya hora había llegado.",
-                biblical: "Romanos 1:1 - Pablo, siervo de Jesucristo...",
+                desc: "Pablo transformó el formato de una simple carta en una pieza de ingeniería espiritual que sacudió al Imperio.",
+                long: "Él entendía que para conquistar Roma no necesitaba legiones, sino una idea cuya hora había llegado. Sus epístolas eran puentes de luz tendidos sobre el abismo de la confusión cultural.",
+                biblical: "Romanos 1:1 - Pablo, siervo de Jesucristo, llamado a ser apóstol, apartado para el evangelio de Dios.",
                 bg: "#020617"
             },
             {
                 title: "El Grito del Profeta",
                 subtitle: "Habacuc: El Fundamento",
-                desc: "Habacuc miró su sociedad y solo vio injusticia.",
-                long: "Su grito fue la semilla de Pablo. Dios respondió: 'Haré una obra que no creerías'. Esa obra es la Fe.",
-                biblical: "Habacuc 2:4 - El justo por su fe vivirá.",
+                desc: "Habacuc miró el espejo de su sociedad y solo vio injusticia. Su grito fue la semilla que Pablo usó.",
+                long: "Habacuc cuestionó el silencio de Dios ante el ruido de la maldad. Dios respondió: 'Haré una obra que no creerías'. Pablo leyó esta historia y comprendió que la respuesta es una sintonía nueva: La Fe.",
+                biblical: "Habacuc 2:4 - He aquí que aquel cuya alma no es recta, se enorgullece (se infla); mas el justo por su fe vivirá.",
                 bg: "#1c1917"
             },
             {
                 title: "La Metrópolis Imperial",
                 subtitle: "Roma: El New York del Siglo I",
-                desc: "Creyentes famosos pero hambrientos de espíritu.",
-                long: "Pablo les escribe como a expertos que olvidaron sintonizar su corazón con el Director.",
-                biblical: "Romanos 1:8 - Vuestra fe se divulga por todo el mundo.",
+                desc: "Escribiendo a una iglesia famosa y sofisticada, pero hambrienta en el espíritu.",
+                long: "Pablo no les escribe como a ignorantes, sino como a expertos que han olvidado cómo sintonizar su corazón con el Director en medio del caos del imperio.",
+                biblical: "Romanos 1:8 - Primeramente doy gracias a mi Dios... de que vuestra fe se divulga por todo el mundo.",
                 bg: "#1c1917"
             },
             {
                 title: "¿Qué es el Orgullo?",
                 subtitle: "Diagnóstico: El Alma Inflada",
-                desc: "No es exceso de poder, es un vacío lleno de aire.",
-                long: "Ocupar con el ego el espacio de Dios. Es el 'solo' que ignora al director.",
-                biblical: "Romanos 1:21 - Se envanecieron en sus razonamientos.",
+                desc: "No es exceso de poder, es un vacío lleno de aire que simula volumen.",
+                long: "Orgullo es ocupar con nuestro ego el espacio que le pertenece a la música de Dios. Es el 'solo' egoísta que ignora al director y destruye la armonía porque busca el aplauso propio.",
+                biblical: "Romanos 1:21 - Pues habiendo conocido a Dios, no le glorificaron como a Dios... sino que se envanecieron en sus razonamientos.",
                 bg: "#450a0a"
             },
             {
                 title: "¿Qué es la Armonía?",
                 subtitle: "Dikeaosune: El Arte de la Justicia",
                 desc: "Seguir la misma partitura bajo la batuta del Espíritu.",
-                long: "Estar en el lugar exacto. Dejar de ser ruido de supervivencia para ser nota de redención.",
-                biblical: "Romanos 1:17 - La justicia de Dios se descubre por fe.",
+                long: "Estar en el lugar exacto, en el tiempo correcto. Dejar de ser un ruido de supervivencia para convertirse en una nota clara en la sinfonía de la redención.",
+                biblical: "Romanos 1:17 - Porque en el evangelio la justicia de Dios se descubre por fe y para fe... el justo por la fe vivirá.",
                 bg: "#1e1b4b"
             },
             {
                 title: "Poder Real vs Falso",
                 subtitle: "Dynamis: Poder para Salvación",
-                desc: "El Evangelio es el poder explosivo que nos rescata.",
-                long: "Dejar de aparentar para permitir que la resurrección nos limpie el ruido.",
-                biblical: "Romanos 1:16 - No me avergüenzo del evangelio.",
+                desc: "El Evangelio no es una teoría, es 'Dynamis': el poder explosivo que nos rescata.",
+                long: "Dejar de aparentar en el 'escaparate' de la vida para permitir que el vasto poder de la resurrección nos limpie el alma de ruidos innecesarios.",
+                biblical: "Romanos 1:16 - Porque no me avergüenzo del evangelio, porque es poder de Dios para salvación a todo aquel que cree.",
                 bg: "#172554"
             },
             {
                 title: "Cierre de Sinfonía",
                 subtitle: "Gracias por tu tiempo",
-                desc: "La melodía apenas comienza en tu vida.",
-                long: "Que hoy decidas unirte a la gran sinfonía del Rey. ¡Bendiciones!",
+                desc: "Nuestra charla termina, pero la melodía apenas comienza en tu vida.",
+                long: "Gracias por permitir que estas palabras resuenen. Que hoy decidas dejar de tocar un 'solo' y te unas a la gran sinfonía del Rey. ¡Bendiciones!",
                 bg: "#0f172a",
                 isFinal: true
             }
@@ -212,52 +229,68 @@
         const prevBtn = document.getElementById('btn-prev');
 
         function init() {
-            // Crear Puntos
-            dots.innerHTML = data.map((_, i) => `<div class="h-1 rounded-full bg-white/20 transition-all duration-500 ${i===0?'w-8 bg-white': 'w-2'}" id="dot-${i}"></div>`).join('');
+            // Generar Puntos de Progreso
+            dots.innerHTML = data.map((_, i) => `<div class="h-0.5 rounded-full bg-white/10 transition-all duration-700 ${i===0?'w-10 bg-white shadow-[0_0_8px_rgba(255,255,255,0.5)]': 'w-3'}" id="dot-${i}"></div>`).join('');
             
-            // Crear Slides
+            // Generar Slides
             master.innerHTML = data.map((s, i) => `
                 <div class="slide ${i===0?'active':''}" id="slide-${i}">
-                    <div class="content-scroll flex flex-col items-center custom-scrollbar px-4">
+                    <div class="content-container px-6">
                         ${s.type === 'cover' ? `
-                            <div class="cover-image-container mb-8">
+                            <div class="cover-image-container mb-12">
                                 <img src="${s.image}" alt="Portada">
                             </div>
                         ` : `
-                            <div class="mb-6 p-6 rounded-3xl bg-white/5 border border-white/10 shadow-2xl">
-                                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                            <div class="mb-8 p-6 rounded-[2rem] bg-white/5 border border-white/10 shadow-2xl">
+                                <svg class="w-12 h-12 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                                </svg>
                             </div>
                         `}
                         
-                        <span class="text-[10px] uppercase tracking-[0.5em] text-white/50 font-bold mb-4">${s.subtitle}</span>
-                        <h2 class="font-serif italic text-4xl md:text-7xl mb-6 text-center leading-tight">${s.title}</h2>
-                        <p class="text-lg md:text-2xl text-white/80 font-light mb-6 text-center max-w-2xl">${s.desc}</p>
+                        <span class="text-[10px] uppercase tracking-[0.5em] text-white/40 font-bold mb-4">${s.subtitle}</span>
+                        <h2 class="font-serif italic text-4xl md:text-7xl mb-8 text-center leading-tight tracking-tight">${s.title}</h2>
+                        <p class="text-lg md:text-2xl text-white/80 font-light mb-10 text-center max-w-2xl leading-relaxed">${s.desc}</p>
                         
-                        <div class="w-full h-px bg-white/10 mb-6"></div>
+                        <div class="content-line w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-10"></div>
                         
-                        <div class="text-sm md:text-base text-white/40 leading-relaxed max-w-2xl italic text-center mb-8 whitespace-pre-line">
+                        <div class="text-sm md:text-base text-white/50 leading-relaxed max-w-2xl text-center mb-12 whitespace-pre-line font-light">
                             ${s.long}
                         </div>
 
-                        ${s.biblical ? `<div class="p-4 bg-white/5 rounded-2xl border-l-4 border-indigo-500 text-left w-full max-w-xl"><p class="text-xs font-bold text-indigo-400 mb-1 uppercase">Fundamento</p><p class="text-sm text-white/60 italic">"${s.biblical}"</p></div>` : ''}
+                        ${s.biblical ? `
+                            <div class="p-6 bg-white/5 rounded-3xl border-l-2 border-indigo-400 text-left w-full max-w-xl backdrop-blur-sm">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.73 5.832 18.253 7.5 18.253s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.253 18.168 18.73 16.5 18.73s-3.332.477-4.5 1.253" stroke-width="1.5"/></svg>
+                                    <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Fundamento Bíblico</span>
+                                </div>
+                                <p class="text-sm text-white/70 italic font-serif">"${s.biblical}"</p>
+                            </div>
+                        ` : ''}
 
                         ${s.reflections ? `
-                            <div class="w-full max-w-xl space-y-3 mt-4 text-left pb-10">
+                            <div class="w-full max-w-xl space-y-4 mt-6 text-left pb-16">
+                                <h4 class="text-[10px] text-center uppercase tracking-[0.3em] text-white/30 font-bold mb-6">Conclusiones para la Reflexión</h4>
                                 ${s.reflections.map((r, ri) => `
-                                    <div class="reflection-item border border-white/5 rounded-xl overflow-hidden" onclick="toggleRef(${i}, ${ri})">
-                                        <button class="w-full p-4 flex justify-between items-center text-left hover:bg-white/5">
-                                            <span class="text-sm font-bold text-white/70">${r.t}</span>
-                                            <span class="text-white/20">↓</span>
+                                    <div class="reflection-item border border-white/10 rounded-2xl overflow-hidden bg-white/5 transition-colors" onclick="toggleRef(${i}, ${ri})">
+                                        <button class="w-full p-5 flex justify-between items-center text-left hover:bg-white/5 transition-colors group">
+                                            <span class="text-sm font-medium text-white/70 group-hover:text-white transition-colors">${r.t}</span>
+                                            <svg class="w-4 h-4 text-white/20 transition-transform duration-300 icon-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                         </button>
                                         <div class="reflection-body" id="ref-${i}-${ri}">
-                                            <p class="p-4 pt-0 text-xs text-white/40 leading-relaxed">${r.d}</p>
+                                            <p class="p-6 pt-0 text-sm text-white/40 leading-relaxed italic border-t border-white/5">${r.d}</p>
                                         </div>
                                     </div>
                                 `).join('')}
                             </div>
                         ` : ''}
                         
-                        ${s.isFinal ? `<div class="flex gap-4 opacity-30 mt-8"><span class="text-2xl">♥</span><span class="text-2xl">★</span></div>` : ''}
+                        ${s.isFinal ? `
+                            <div class="flex gap-6 opacity-20 mt-12 animate-pulse">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/></svg>
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
             `).join('');
@@ -266,39 +299,53 @@
         }
 
         function update() {
-            // Actualizar Fondo
+            // Actualizar Color de Fondo según el Slide
             bgLayer.style.backgroundColor = data[current].bg;
             
-            // Actualizar Slides
+            // Actualizar Estados de los Slides
             data.forEach((_, i) => {
                 const el = document.getElementById(`slide-${i}`);
                 const dot = document.getElementById(`dot-${i}`);
                 if(i === current) {
                     el.classList.add('active');
-                    dot.classList.add('w-8', 'bg-white');
-                    dot.classList.remove('w-2', 'bg-white/20');
+                    dot.classList.add('w-10', 'bg-white');
+                    dot.classList.remove('w-3', 'bg-white/10');
+                    // Resetear scroll al cambiar de slide
+                    el.scrollTop = 0;
                 } else {
                     el.classList.remove('active');
-                    dot.classList.remove('w-8', 'bg-white');
-                    dot.classList.add('w-2', 'bg-white/20');
+                    dot.classList.remove('w-10', 'bg-white');
+                    dot.classList.add('w-3', 'bg-white/10');
                 }
             });
 
-            // Botones
+            // Botón Atrás
             prevBtn.style.opacity = current === 0 ? "0" : "1";
             prevBtn.style.pointerEvents = current === 0 ? "none" : "auto";
-            nextBtn.innerText = current === 0 ? "Comenzar" : (current === data.length - 1 ? "Reiniciar" : "Siguiente");
+            
+            // Texto Botón Siguiente
+            if (current === 0) nextBtn.innerText = "Comenzar Charla";
+            else if (current === data.length - 1) nextBtn.innerText = "Reiniciar";
+            else nextBtn.innerText = "Continuar";
         }
 
         function toggleRef(slideIdx, refIdx) {
             const el = document.getElementById(`ref-${slideIdx}-${refIdx}`);
             const parent = el.parentElement;
             const isOpen = parent.classList.contains('open');
+            const arrow = parent.querySelector('.icon-arrow');
             
-            // Cerrar otros en el mismo slide
-            document.querySelectorAll(`#slide-${slideIdx} .reflection-item`).forEach(item => item.classList.remove('open'));
+            // Cerrar otros acordeones del mismo slide
+            document.querySelectorAll(`#slide-${slideIdx} .reflection-item`).forEach(item => {
+                item.classList.remove('open');
+                const a = item.querySelector('.icon-arrow');
+                if(a) a.style.transform = 'rotate(0deg)';
+            });
             
-            if(!isOpen) parent.classList.add('open');
+            if(!isOpen) {
+                parent.classList.add('open');
+                arrow.style.transform = 'rotate(180deg)';
+            }
         }
 
         nextBtn.onclick = () => {
@@ -312,6 +359,12 @@
                 update();
             }
         };
+
+        // Navegación con Teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight") nextBtn.click();
+            if (e.key === "ArrowLeft") prevBtn.click();
+        });
 
         window.onload = init;
     </script>
