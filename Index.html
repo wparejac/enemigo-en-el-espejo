@@ -1,0 +1,280 @@
+import React, { useState } from 'react';
+import { 
+  ChevronRight, 
+  ChevronLeft, 
+  Library, 
+  Globe, 
+  Wind, 
+  Music,
+  Heart,
+  Sparkles,
+  Zap,
+  Star,
+  Activity,
+  BookOpen,
+  ChevronDown,
+  User,
+  MessageCircle,
+  Compass
+} from 'lucide-react';
+
+const App = () => {
+  const [step, setStep] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+  const [openReflection, setOpenReflection] = useState(null);
+
+  const changeStep = (newStep) => {
+    setIsVisible(false);
+    setOpenReflection(null);
+    setTimeout(() => {
+      setStep(newStep);
+      setIsVisible(true);
+    }, 400);
+  };
+
+  const content = [
+    {
+      title: "EL ENEMIGO EN EL ESPEJO",
+      subtitle: "La Sinfonía de los Romanos",
+      image: "https://i.imgur.com/ncZnQAB.jpeg",
+      icon: <User className="w-16 h-16 text-white" />,
+      description: "Cuando el éxito suena fuerte, pero el corazón está desafinado.",
+      longText: "Prepárate para descubrir por qué incluso los 'famosos' necesitan ser rescatados de sí mismos. No es religión, es el arte de la armonía perfecta.",
+      bg: "bg-black",
+      isTitle: true
+    },
+    {
+      title: "El Piano de la Gran Sala",
+      subtitle: "Fase 1: El Ruido de la Uniformidad",
+      icon: <BookOpen className="w-10 h-10 text-amber-400" />,
+      description: "Un piano majestuoso que olvidó que la música no nace de la uniformidad, sino de la integración.",
+      longText: `Cuentan que en un antiguo conservatorio, había un piano de cola majestuoso que presumía de su sonido perfecto. Un día, las Teclas Blancas se reunieron y decidieron que ellas eran las verdaderas dueñas de la música. "Somos puras, claras y representamos las notas fundamentales. Las Teclas Negras solo interrumpen nuestra blancura", dijeron con soberbia.
+      
+Las Teclas Negras, sintiéndose heridas, decidieron guardar silencio. "Si no nos quieren, no nos necesitan", pensaron.
+
+Esa tarde, un joven músico se sentó a tocar. Intentó interpretar una melodía de esperanza, pero por más que se esforzaba, la música sonaba vacía, plana y sin alma. Faltaban los matices, las transiciones, los sostenidos y los bemoles que dar profundidad a la emoción. El piano ya no cantaba; solo emitía sonidos monótonos.
+
+El maestro del conservatorio, al notar la frustración del joven, se acercó y le susurró: "El problema no es tu talento, es que este piano ha olvidado que la música no nace de la uniformidad. La melodía puede vivir en las blancas, pero la armonía solo existe cuando las negras aceptan su lugar y las blancas reconocen que sin ellas, la obra está incompleta".`,
+      reflections: [
+        { 
+          title: "El egoísmo es ruido; la armonía es música", 
+          text: "El ruido es la insistencia del 'yo' por sobresalir a toda costa. La armonía es la renuncia voluntaria al protagonismo individual." 
+        },
+        { 
+          title: "La trampa del protagonismo absoluto", 
+          text: "Creer que somos los únicos dueños de la verdad o del talento nos aísla. El éxito solitario es el preludio de un alma vacía." 
+        },
+        { 
+          title: "La sincronía requiere humildad", 
+          text: "Solo cuando las blancas reconocieron su limitación, el piano volvió a cantar. La humildad es la llave de la sinfonía." 
+        }
+      ],
+      bg: "bg-stone-950",
+      isStory: true
+    },
+    {
+      title: "El Arquitecto del Destino",
+      subtitle: "Pablo: De perseguidor a Estratega",
+      icon: <Library className="w-10 h-10 text-indigo-400" />,
+      description: "Pablo transformó el formato de una simple carta en un manifiesto que sacudió los cimientos del Imperio Romano.",
+      longText: "Él entendía que para conquistar Roma, no necesitaba legiones, sino una idea cuya hora había llegado. Sus epístolas eran puentes de luz sobre el abismo de la confusión cultural.",
+      bg: "bg-slate-950"
+    },
+    {
+      title: "El Grito del Profeta",
+      subtitle: "Habacuc 1: El Fundamento de la Revolución",
+      icon: <MessageCircle className="w-10 h-10 text-amber-500" />,
+      description: "Habacuc miró el espejo de su sociedad y solo vio injusticia. Su grito de desesperación fue la semilla que Pablo usó para su carta.",
+      longText: "En Habacuc 1 vemos a un profeta cuestionando el silencio de Dios ante el ruido de la maldad. Sin saberlo, Habacuc estaba preparando el terreno para Pablo. El profeta gritó: '¿Hasta cuándo?'. Dios respondió: 'Mira las naciones... porque haré una obra'. Pablo leyó esta historia y comprendió que la respuesta a la injusticia no es una ley nueva, sino una sintonía nueva: La Fe.",
+      biblical: {
+        ref: "Habacuc 2:4 (Citado en Rom 1:17)",
+        text: "He aquí que aquel cuya alma no es recta, se enorgullece (se infla); mas el justo por su fe vivirá."
+      },
+      bg: "bg-amber-950"
+    },
+    {
+      title: "La 'Gran Manzana' Imperial",
+      subtitle: "Roma: Creyentes famosos... pero necesitados",
+      icon: <Globe className="w-10 h-10 text-amber-400" />,
+      description: "En la transición de Claudio a Nerón, Roma era el epicentro de la sofisticación. Pablo sabía un secreto: se puede ser famoso en el mundo y estar hambriento en el espíritu.",
+      longText: "Pablo no les escribe como a ignorantes, sino como a expertos que han olvidado cómo sintonizar su corazón con el Director en medio del caos político.",
+      bg: "bg-stone-900"
+    },
+    {
+      title: "¿Qué es el Orgullo?",
+      subtitle: "El Diagnóstico: El Alma Inflada",
+      icon: <Wind className="w-10 h-10 text-red-400" />,
+      description: "Basado en Habacuc 2:4, el orgullo no es 'exceso de poder', es un vacío lleno de aire que simula volumen.",
+      longText: "Orgullo es ocupar con nuestro ego el espacio que le pertenece a la música de Dios. Es el 'solo' egoísta que ignora al director y destruye la armonía porque busca el aplauso propio antes que la sonrisa del Rey.",
+      bg: "bg-red-950"
+    },
+    {
+      title: "¿Qué es la Armonía?",
+      subtitle: "Dikeaosune: El Arte de la Justicia",
+      icon: <Activity className="w-10 h-10 text-emerald-400" />,
+      description: "La armonía no es que todos canten lo mismo, es que todos sigan la misma partitura bajo la batuta del Espíritu.",
+      longText: "Estar en armonía (Dikeaosune) es ocupar tu lugar exacto en el diseño de Dios. Es cuando tu vida deja de ser un 'ruido de supervivencia' para convertirse en una nota clara en la sinfonía de la redención.",
+      bg: "bg-indigo-950"
+    },
+    {
+      title: "Poder Real vs Poder Falso",
+      subtitle: "Sin Vergüenza en un Mundo Superficial",
+      icon: <Zap className="w-10 h-10 text-blue-400" />,
+      description: "El Evangelio es 'Dynamis': el poder explosivo que nos rescata de nuestra propia naturaleza y nos permite vivir con integridad real.",
+      longText: "Vivir hoy requiere la valentía de ser contracultural. Es dejar de aparentar en el 'escaparate' de la vida para permitir que el vasto poder de la resurrección nos limpie de ruidos innecesarios.",
+      bg: "bg-blue-950"
+    },
+    {
+      title: "Cierre de Sinfonía",
+      subtitle: "Gracias por ser parte de esta historia",
+      icon: <Star className="w-10 h-10 text-yellow-400" />,
+      description: "Nuestra charla termina, pero la melodía apenas comienza en tu vida.",
+      longText: "Gracias por tu tiempo, por tu escucha y por permitir que estas palabras resuenen. Que hoy decidas dejar de tocar un 'solo' y te unas a la gran sinfonía del Rey. ¡Bendiciones!",
+      bg: "bg-slate-900",
+      isFinal: true
+    }
+  ];
+
+  const current = content[step];
+
+  return (
+    <div className={`min-h-screen ${current.bg} text-white transition-colors duration-1000 flex flex-col font-sans overflow-hidden selection:bg-white/20`}>
+      
+      {/* Progreso Superior */}
+      <div className="pt-10 flex justify-center gap-2">
+        {content.map((_, i) => (
+          <div 
+            key={i} 
+            className={`h-0.5 rounded-full transition-all duration-700 ${i === step ? 'w-10 bg-white' : 'w-2 bg-white/10'}`}
+          />
+        ))}
+      </div>
+
+      {/* Contenedor Principal */}
+      <main className={`flex-1 flex flex-col items-center justify-center px-6 transition-all duration-500 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        
+        {current.isTitle && current.image ? (
+          <div className="mb-8 w-64 h-80 md:w-80 md:h-[28rem] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl scale-110">
+            <img 
+              src={current.image} 
+              alt="Portada El Enemigo en el Espejo" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ) : (
+          <div className={`mb-8 p-6 rounded-[2.5rem] bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl ${current.isTitle ? 'scale-125' : 'animate-pulse'}`}>
+            {current.icon}
+          </div>
+        )}
+
+        <div className={`text-center max-w-4xl ${current.isStory ? 'max-h-[75vh] overflow-y-auto pr-4 custom-scrollbar' : ''}`}>
+          <span className="text-[10px] md:text-xs uppercase tracking-[0.6em] text-white/50 font-bold mb-6 block">
+            {current.subtitle}
+          </span>
+          
+          <h2 className={`font-serif italic font-extralight mb-10 leading-tight tracking-tight text-white/95 ${current.isTitle ? 'text-6xl md:text-9xl' : 'text-4xl md:text-6xl'}`}>
+            {current.title}
+          </h2>
+          
+          <div className="space-y-8">
+            <p className={`text-white/80 font-light leading-relaxed max-w-2xl mx-auto ${current.isTitle ? 'text-xl md:text-3xl' : 'text-lg md:text-2xl'}`}>
+              {current.description}
+            </p>
+            
+            <div className={`text-sm md:text-base text-white/40 font-light leading-relaxed max-w-2xl mx-auto border-t border-white/5 pt-8 italic whitespace-pre-line ${current.isStory ? 'text-left not-italic text-white/60' : ''}`}>
+              {current.longText}
+            </div>
+
+            {/* Fundamento Bíblico para Habacuc */}
+            {current.biblical && (
+              <div className="mt-8 p-6 bg-amber-500/10 backdrop-blur-md rounded-2xl border border-amber-500/20 max-w-xl mx-auto border-l-4">
+                 <div className="flex items-center gap-2 mb-2">
+                    <Compass className="w-4 h-4 text-amber-400" />
+                    <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">{current.biblical.ref}</span>
+                 </div>
+                 <p className="text-sm font-serif italic text-white/70 leading-relaxed">"{current.biblical.text}"</p>
+              </div>
+            )}
+
+            {/* Reflexiones Expandibles para la Historia */}
+            {current.reflections && (
+              <div className="mt-12 space-y-4 max-w-2xl mx-auto">
+                <h4 className="text-[10px] uppercase tracking-widest text-amber-400 font-bold mb-6 text-center">Conclusiones para la Reflexión</h4>
+                {current.reflections.map((reflection, idx) => (
+                  <div key={idx} className="border border-white/10 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm transition-all">
+                    <button 
+                      onClick={() => setOpenReflection(openReflection === idx ? null : idx)}
+                      className="w-full flex justify-between items-center p-5 text-left hover:bg-white/5 transition-colors"
+                    >
+                      <span className="text-sm font-medium text-white/90">{reflection.title}</span>
+                      <ChevronDown className={`w-4 h-4 text-white/30 transition-transform ${openReflection === idx ? 'rotate-180' : ''}`} />
+                    </button>
+                    <div className={`transition-all duration-300 overflow-hidden ${openReflection === idx ? 'max-h-40' : 'max-h-0'}`}>
+                      <p className="p-5 pt-0 text-sm text-white/50 leading-relaxed italic border-t border-white/5">
+                        {reflection.text}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {current.isFinal && (
+          <div className="mt-12 flex gap-4 text-white/20">
+            <Heart className="w-5 h-5" />
+            <Sparkles className="w-5 h-5" />
+            <Star className="w-5 h-5" />
+          </div>
+        )}
+      </main>
+
+      {/* Navegación Minimalista Lateralizada */}
+      <footer className="fixed bottom-0 left-0 w-full p-8 md:p-12 flex justify-between items-center bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none">
+        
+        <button 
+          onClick={() => step > 0 && changeStep(step - 1)}
+          disabled={step === 0}
+          className={`pointer-events-auto flex items-center gap-2 text-[10px] font-bold tracking-[0.3em] uppercase transition-all ${step === 0 ? 'opacity-0 invisible' : 'text-white/30 hover:text-white'}`}
+        >
+          <ChevronLeft className="w-4 h-4" /> Atrás
+        </button>
+
+        <button 
+          onClick={() => step < content.length - 1 ? changeStep(step + 1) : changeStep(0)}
+          className={`pointer-events-auto group flex items-center gap-4 px-6 md:px-10 py-4 rounded-full border transition-all active:scale-95 shadow-2xl ${current.isTitle ? 'bg-white text-black border-white' : 'bg-white/5 text-white border-white/20 hover:bg-white hover:text-black'}`}
+        >
+          <span className="text-[10px] font-bold tracking-[0.3em] uppercase">
+            {step === 0 ? "Comenzar" : step === content.length - 1 ? "Reiniciar" : "Siguiente"}
+          </span>
+          <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+        </button>
+      </footer>
+
+      {/* Estilos para el scrollbar */}
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+        }
+      `}</style>
+
+      {/* Líneas de Decoración */}
+      <div className="fixed top-0 left-0 p-16 opacity-5 hidden lg:block pointer-events-none">
+        <div className="w-32 h-32 border-t border-l border-white" />
+      </div>
+      <div className="fixed bottom-0 right-0 p-16 opacity-5 hidden lg:block pointer-events-none">
+        <div className="w-32 h-32 border-b border-r border-white" />
+      </div>
+    </div>
+  );
+};
+
+export default App;
